@@ -1,0 +1,91 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOLS_VERSION as String
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId "cn.ccrise.genki"
+        minSdkVersion MIN_SDK_VERSION as int
+        targetSdkVersion TARGET_SDK_VERSION as int
+        versionCode 2
+        versionName "1.0"
+        flavorDimensions "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "YIblvO4CZH8gSNmgwpkI01",
+                GETUI_APP_KEY   : "Fwz3CbXrS66MCAz35uCmh6",
+                GETUI_APP_SECRET: "GTvhMUrXtXA7qQYhLPSn23",
+                UMENG_APPKEY    : "59ded21fcae7e727ee000045",
+                UMENG_CHANNEL   : "DEFAULT",
+                SERVER_TYPE     : "TEST",
+                GAODE_KEY       : "09e4d4b90452114fe1a7fc23cee6cca4",
+        ]
+    }
+    productFlavors {
+        Test {
+            manifestPlaceholders = [
+                    SERVER_NAME: "测试服务器",
+                    SERVER_TYPE: "TEST",
+            ]
+        }
+        Official {
+            manifestPlaceholders = [
+                    SERVER_NAME: "正式服务器",
+                    SERVER_TYPE: "OFFICIAL",
+            ]
+        }
+    }
+    signingConfigs {
+        key {
+            storeFile file('../key/key.jks') //签名路径
+            keyAlias 'android'
+            keyPassword 'android'
+            storePassword 'android'
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.key
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.key
+
+            manifestPlaceholders = [
+                    UMENG_CHANNEL: "DEBUG"
+            ]
+        }
+    }
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                outputFileName = "元气_${variant.versionCode}_V${variant.versionName}_${variant.flavorName}_${variant.buildType.name}.apk"
+            }
+    }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+
+    implementation project(path: ':baseframe')
+
+    annotationProcessor "com.jakewharton:butterknife-compiler:${BUTTERKNIFE_VERSION}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${DAGGER_2_VERSION}"
+    annotationProcessor "com.github.bumptech.glide:compiler:${GLIDE_VERSION}"
+}

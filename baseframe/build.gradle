@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOLS_VERSION as String
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION as int
+        targetSdkVersion TARGET_SDK_VERSION as int
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testImplementation 'junit:junit:4.12'
+    api "com.android.support:appcompat-v7:${ANDROID_SUPPORT_VERSION}"
+    api "com.android.support:recyclerview-v7:${ANDROID_SUPPORT_VERSION}"
+    //ButterKnife
+    api "com.jakewharton:butterknife:${BUTTERKNIFE_VERSION}"
+    //Glide
+    api "com.github.bumptech.glide:glide:${GLIDE_VERSION}"
+    api "com.github.bumptech.glide:annotations:${GLIDE_VERSION}"
+    api "com.github.bumptech.glide:okhttp3-integration:${GLIDE_VERSION}"
+    //Retrofit
+    api "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
+    api "com.squareup.retrofit2:converter-gson:${RETROFIT_VERSION}"
+    api "com.squareup.retrofit2:adapter-rxjava2:${RETROFIT_VERSION}"
+    api "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VERSION}"
+    //Dagger2
+    api "com.google.dagger:dagger:${DAGGER_2_VERSION}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${DAGGER_2_VERSION}"
+    //Rxjava、RxAndroid
+    api "io.reactivex.rxjava2:rxandroid:${RXANDROID_VERSION}"
+    /*
+     * Because RxAndroid releases are few and far between, it is recommended you also
+     * explicitly depend on RxJava's latest version for bug fixes and new features.
+     */
+    api "io.reactivex.rxjava2:rxjava:${RXJAVA_VERSION}"
+    //EventBus
+    api "org.greenrobot:eventbus:${EVENTBUS_VERSION}"
+    //LeakCanary 内存泄露检测
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:${LEAKCANARY_VERSION}"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${LEAKCANARY_VERSION}"
+    //友盟统计
+    api "com.umeng.analytics:analytics:${UMENG_VERSION}"
+    //gson json工具
+    api "com.google.code.gson:gson:${GSON_VERSION}"
+}

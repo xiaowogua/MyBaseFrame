@@ -33,6 +33,7 @@ dependencies {
     })
     testImplementation 'junit:junit:4.12'
     api "com.android.support:appcompat-v7:${ANDROID_SUPPORT_VERSION}"
+    api "com.android.support:design:${ANDROID_SUPPORT_VERSION}"
     api "com.android.support:recyclerview-v7:${ANDROID_SUPPORT_VERSION}"
     //ButterKnife
     api "com.jakewharton:butterknife:${BUTTERKNIFE_VERSION}"

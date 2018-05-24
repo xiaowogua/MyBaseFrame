@@ -22,11 +22,11 @@ public class StartUpPresenter extends BasePresenterImpl<StartUpContract.View> im
     @Override
     protected void init() {
         handler = new Handler(Looper.getMainLooper());
-        countDown(3);
+        countDown(1);
         request.getAd(1, result -> {
             MLog.d("http_debug", result.toString());
 
-            handler.post(() -> mView.countDown(3));
+            handler.post(() -> mView.countDown(1));
 
         });
     }
@@ -37,7 +37,7 @@ public class StartUpPresenter extends BasePresenterImpl<StartUpContract.View> im
             mView.finish();
             return;
         }
-        mView.countDown(3);
+        mView.countDown(1);
         handler.postDelayed(() -> {
             int i = time;
             countDown(--i);

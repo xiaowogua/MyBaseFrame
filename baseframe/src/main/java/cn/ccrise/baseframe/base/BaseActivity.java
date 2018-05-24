@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -119,9 +120,9 @@ public abstract class BaseActivity<T extends IBasePresenter> extends AppCompatAc
 
         notHideKeyboardSet = new HashSet<>();
 
-//        setSupportActionBar(toolbar);
-//        actionBar = getSupportActionBar();
-//        actionBar.setDisplayShowTitleEnabled(false);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
 
         if (isImmersiveMode()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -354,38 +355,39 @@ public abstract class BaseActivity<T extends IBasePresenter> extends AppCompatAc
         toolbar_bg.getLocationInWindow(leftTopToolbar);
 
         for (View view : notHideKeyboardSet) {
-            int[] leftTop = {0, 0};
-            //获取输入框当前的location位置
-            view.getLocationInWindow(leftTop);
-            int left = leftTop[0];
-            int top = leftTop[1] + (leftTopToolbar[1] < 0 ? toolbar_bg.getMeasuredHeight() : 0);
-            int bottom = top + v.getHeight() + (leftTopToolbar[1] < 0 ? toolbar_bg.getMeasuredHeight() : 0);
-            int right = left + view.getWidth();
-            float eventX = event.getX();
-            float eventY = event.getY();
-            if (eventX > left && eventX < right
-                    && eventY > top && eventY < bottom) {
+            if (isEventInView(view, event)) {
                 // 点击的是输入框区域，保留点击EditText的事件
                 return false;
             }
         }
         if (v != null && (v instanceof EditText)) {
-            int[] leftTop = {0, 0};
-            //获取输入框当前的location位置
-            v.getLocationInWindow(leftTop);
-
-            int left = leftTop[0];
-            int top = leftTop[1] + (leftTopToolbar[1] < 0 ? toolbar_bg.getMeasuredHeight() : 0);
-            int bottom = top + v.getHeight() + (leftTopToolbar[1] < 0 ? toolbar_bg.getMeasuredHeight() : 0);
-            int right = left + v.getWidth();
-
-            if (event.getX() > left && event.getX() < right
-                    && event.getY() > top && event.getY() < bottom) {
+            if (isEventInView(v, event)) {
                 // 点击的是输入框区域，保留点击EditText的事件
                 return false;
             } else {
                 return true;
             }
+        }
+        return false;
+    }
+
+    private boolean isEventInView(@NonNull View v, MotionEvent event) {
+        int[] leftTopToolbar = {0, 0};
+        toolbar_bg.getLocationInWindow(leftTopToolbar);
+
+        int[] leftTop = {0, 0};
+        //获取输入框当前的location位置
+        v.getLocationInWindow(leftTop);
+        int left = leftTop[0];
+        int top = leftTop[1] + (leftTopToolbar[1] < 0 ? -leftTopToolbar[1] : 0);
+        int bottom = top + v.getHeight() + (leftTopToolbar[1] < 0 ? -leftTopToolbar[1] : 0);
+        int right = left + v.getWidth();
+        float eventX = event.getX();
+        float eventY = event.getY();
+        if (eventX > left && eventX < right
+                && eventY > top && eventY < bottom) {
+            // 点击的是输入框区域，保留点击EditText的事件
+            return true;
         }
         return false;
     }

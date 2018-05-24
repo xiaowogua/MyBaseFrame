@@ -17,6 +17,7 @@
     <!-- 右边三个点的样式 -->
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
         <item name="android:paddingRight">20dp</item>
+        <item name="android:src">?attr/overflowButtonSrc</item>
     </style>
 
     <!-- Toolbar中标题文字的style -->
@@ -37,12 +38,15 @@
 
     <attr name="toolbarTitleTextColor" format="color" />
     <attr name="backgroundColor" format="color" />
+    <attr name="overflowButtonSrc" format="reference" />
 
     <!-- Base application theme. -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="toolbarTitleTextColor">@color/white</item>
         <item name="backgroundColor">@color/white</item>
 
+        <item name="overflowButtonSrc">@drawable/abc_ic_menu_overflow_material</item>
+        <item name="colorControlNormal">@color/white</item>
         <item name="android:windowBackground">@color/transparent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
